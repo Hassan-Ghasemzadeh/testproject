@@ -1,0 +1,37 @@
+import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:testproject/src/data/models/task.dart';
+import 'package:testproject/src/domain/repositories/task_repo_impl.dart';
+import 'package:testproject/src/domain/usecases/add_task_usecase.dart';
+import 'package:testproject/src/domain/usecases/delete_usecase.dart';
+import 'package:testproject/src/domain/usecases/toggle_checkbox_usecase.dart';
+
+import '../../../injector.dart';
+part 'tasks_event.dart';
+part 'tasks_state.dart';
+
+class TasksBloc extends Bloc<TasksEvent, TasksState> {
+  TasksBloc() : super(const TasksState()) {
+    final TaskRepositoryImpl repo = injector<TaskRepositoryImpl>();
+    AddTaskUseCase add = AddTaskUseCase(repo);
+    ToggleCheckBoxUseCase toggle = ToggleCheckBoxUseCase(repo: repo);
+    DeleteTaskUseCase delete = DeleteTaskUseCase(repo);
+    on<AddTask>((event, emit) async {
+      final state = this.state;
+      final tasks = await add.invoke(state.tasks, event.task);
+      emit(TasksState(tasks: tasks));
+    });
+
+    on<ToggleCheckBox>(((event, emit) async {
+      final state = this.state;
+      final result = await toggle.invoke(state.tasks, event.task);
+      emit(TasksState(tasks: result));
+    }));
+
+    on<DeleteTask>((event, emit) async {
+      final state = this.state;
+      final result = await delete.invoke(state.tasks, event.task);
+      emit(TasksState(tasks: result));
+    });
+  }
+}
