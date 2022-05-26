@@ -1,6 +1,6 @@
 import 'package:testproject/src/data/models/task.dart';
 import 'package:testproject/src/data/repositories/base_repository.dart';
-import 'package:testproject/src/domain/entities/task_data_source.dart';
+import 'package:testproject/src/data/datasources/task_data_source.dart';
 
 class TaskRepositoryImpl extends ITaskRepository {
   final source = TaskDataSource();
