@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:testproject/src/core/utils/tasks_sort.dart';
 import 'package:testproject/src/data/models/task.dart';
-
 import '../blocs/bloc/tasks_bloc.dart';
 import '../blocs/blocs_export.dart';
 import '../widgets/add_task_widget.dart';
@@ -12,11 +11,13 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return HomeView();
+    return const HomeView();
   }
 }
 
 class HomeView extends StatefulWidget {
+  const HomeView({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _HomeViewState();
 }
@@ -26,6 +27,11 @@ class _HomeViewState extends State<HomeView> {
   TextEditingController descriptionController = TextEditingController();
 
   bool isAscending = true;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -88,7 +94,8 @@ class _HomeViewState extends State<HomeView> {
               const Center(
                 child: Chip(label: Text("Tasks")),
               ),
-              TasksList(tasks: tasks)
+              TasksList(tasks: tasks),
+              ElevatedButton(onPressed: () {}, child: Text('${state.state}'))
             ],
           ),
           floatingActionButton: FloatingActionButton(

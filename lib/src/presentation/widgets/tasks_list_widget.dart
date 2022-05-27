@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,11 +15,38 @@ class TasksList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return ListWidget(
+      tasks: tasks,
+    );
+  }
+}
+
+class ListWidget extends StatefulWidget {
+  final List<Task> tasks;
+
+  const ListWidget({
+    Key? key,
+    required this.tasks,
+  }) : super(key: key);
+  @override
+  State<StatefulWidget> createState() {
+    return _ListViewState();
+  }
+}
+
+class _ListViewState extends State<ListWidget> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Expanded(
         child: ListView.builder(
-      itemCount: tasks.length,
+      itemCount: widget.tasks.length,
       itemBuilder: (context, index) {
-        var task = tasks[index];
+        var task = widget.tasks[index];
         return Dismissible(
           key: Key(task.title),
           onDismissed: (direction) {

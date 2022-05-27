@@ -1,3 +1,4 @@
+import 'package:testproject/src/core/utils/task_state.dart';
 import 'package:testproject/src/data/models/task.dart';
 import 'package:testproject/src/data/repositories/base_repository.dart';
 import 'package:testproject/src/data/datasources/task_data_source.dart';
@@ -15,7 +16,13 @@ class TaskRepositoryImpl extends ITaskRepository {
   }
 
   @override
-  Future<List<Task>> delete(List<Task> tasks, Task task) {
+  Future<List<Task>> delete(List<Task> tasks, Task task) async {
     return source.delete(tasks, task);
+  }
+
+  @override
+  Future<TaskActiveAndCompleteState> getActiveAndCompleteTaskState(
+      List<Task> tasks) async {
+    return source.getActiveAndCompleteTaskState(tasks);
   }
 }
