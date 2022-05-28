@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testproject/src/core/utils/task_state.dart';
 import 'package:testproject/src/core/utils/tasks_sort.dart';
 import 'package:testproject/src/data/models/task.dart';
 import '../blocs/bloc/tasks_bloc.dart';
@@ -95,7 +96,16 @@ class _HomeViewState extends State<HomeView> {
                 child: Chip(label: Text("Tasks")),
               ),
               TasksList(tasks: tasks),
-              ElevatedButton(onPressed: () {}, child: Text('${state.state}'))
+              ElevatedButton(
+                onPressed: () {
+                  context
+                      .read<TasksBloc>()
+                      .add(TaskActiveAndCompleteStatus(tasks: tasks));
+                },
+                child: Text(
+                  'Active:${state.state.activeTask} complete:${state.state.completedTask}',
+                ),
+              )
             ],
           ),
           floatingActionButton: FloatingActionButton(

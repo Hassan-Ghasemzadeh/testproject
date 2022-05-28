@@ -36,17 +36,13 @@ class ListWidget extends StatefulWidget {
 
 class _ListViewState extends State<ListWidget> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Expanded(
         child: ListView.builder(
       itemCount: widget.tasks.length,
       itemBuilder: (context, index) {
         var task = widget.tasks[index];
+
         return Dismissible(
           key: Key(task.title),
           onDismissed: (direction) {
@@ -56,7 +52,13 @@ class _ListViewState extends State<ListWidget> {
                 SnackBar(content: Text('${task.title} dismissed')));
           },
           child: ListTile(
-            title: Text(task.title),
+            title: Text(
+              task.title,
+              style: TextStyle(
+                  decoration: task.isDone!
+                      ? TextDecoration.lineThrough
+                      : TextDecoration.none),
+            ),
             subtitle: Text(task.description),
             trailing: Checkbox(
               onChanged: (value) {

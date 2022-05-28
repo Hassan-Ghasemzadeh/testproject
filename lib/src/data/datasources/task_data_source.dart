@@ -23,14 +23,14 @@ class TaskDataSource {
   Future<TaskActiveAndCompleteState> getActiveAndCompleteTaskState(
       List<Task> tasks) async {
     var size = tasks.length;
-    final task = tasks.firstWhere((element) => element.isDone == true);
-    final List<Task> activeTaskList = <Task>[];
-    activeTaskList.add(task);
-    final int activeTaskCount = activeTaskList.length;
+    final List<Task> completed =
+        tasks.where((element) => element.isDone!).toList();
+
+    final int completedTaskCount = completed.length;
 
     return TaskActiveAndCompleteState(
-      activeTask: 100.0 * activeTaskCount ~/ size,
-      completedTask: 100.0 * (size - activeTaskCount) ~/ size,
+      activeTask: size - completedTaskCount,
+      completedTask: completedTaskCount,
     );
   }
 }

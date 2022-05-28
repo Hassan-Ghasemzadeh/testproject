@@ -40,6 +40,7 @@ class DeleteTask extends TasksEvent {
 
 class TaskActiveAndCompleteStatus extends TasksEvent {
   final List<Task> tasks;
+
   const TaskActiveAndCompleteStatus({required this.tasks});
   @override
   List<Object> get props => [tasks];

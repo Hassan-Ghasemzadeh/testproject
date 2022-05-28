@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:testproject/src/core/utils/task_state.dart';
@@ -24,25 +22,27 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     on<AddTask>((event, emit) async {
       final state = this.state;
       final tasks = await add.invoke(state.tasks, event.task);
-      emit(TasksState(tasks));
+
+      emit(TasksState(tasks: tasks));
     });
 
     on<ToggleCheckBox>(((event, emit) async {
       final state = this.state;
       final result = await toggle.invoke(state.tasks, event.task);
-      emit(TasksState(result));
+      emit(TasksState(tasks: result));
     }));
 
     on<DeleteTask>((event, emit) async {
       final state = this.state;
       final result = await delete.invoke(state.tasks, event.task);
-      emit(TasksState(result));
+      emit(TasksState(tasks: result));
     });
 
     on<TaskActiveAndCompleteStatus>(((event, emit) async {
       final state = this.state;
       final result = await status.invoke(state.tasks);
-      emit(TasksState(state.tasks, result));
+
+      emit(TasksState(state: result));
     }));
   }
 }
