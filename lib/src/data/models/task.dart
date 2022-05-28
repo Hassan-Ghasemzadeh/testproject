@@ -6,27 +6,29 @@ class Task extends Equatable {
   final String description;
   bool? isDone;
   final String id;
-  Task({
-    required this.title,
-    required this.description,
-    this.isDone,
-    required this.id,
-  }) {
+  final String category;
+
+  Task(
+      {required this.title,
+      required this.description,
+      this.isDone,
+      required this.id,
+      required this.category}) {
     isDone = isDone ?? false;
   }
 
-  Task copyWith({
-    String? title,
-    String? description,
-    bool? isDone,
-    String? id,
-  }) {
+  Task copyWith(
+      {String? title,
+      String? description,
+      bool? isDone,
+      String? id,
+      String? category}) {
     return Task(
-      title: title ?? this.title,
-      description: description ?? this.description,
-      isDone: isDone ?? this.isDone,
-      id: id ?? this.id,
-    );
+        title: title ?? this.title,
+        description: description ?? this.description,
+        isDone: isDone ?? this.isDone,
+        id: id ?? this.id,
+        category: category ?? this.category);
   }
 
   @override
@@ -43,10 +45,10 @@ class Task extends Equatable {
 
   factory Task.fromMap(Map<String, dynamic> map) {
     return Task(
-      title: map['title'] as String,
-      description: map['description'] as String,
-      isDone: map['isDone'] != null ? map['isDone'] as bool : null,
-      id: map['id'] as String,
-    );
+        title: map['title'] as String,
+        description: map['description'] as String,
+        isDone: map['isDone'] != null ? map['isDone'] as bool : null,
+        id: map['id'] as String,
+        category: map['category'] as String);
   }
 }

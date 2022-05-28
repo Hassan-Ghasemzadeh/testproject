@@ -45,3 +45,19 @@ class TaskActiveAndCompleteStatus extends TasksEvent {
   @override
   List<Object> get props => [];
 }
+
+class InsertCategoryEvent extends TasksEvent {
+  final Category category;
+  const InsertCategoryEvent(this.category) : super(false);
+
+  @override
+  List<Object> get props => [];
+}
+
+class FilterTasksItem extends TasksEvent {
+  final FilterTaskState filter;
+  const FilterTasksItem(this.filter) : super(false);
+
+  @override
+  List<Object> get props => [filter];
+}

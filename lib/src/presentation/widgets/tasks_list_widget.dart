@@ -3,23 +3,31 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:testproject/src/data/models/task_category.dart';
+import 'package:testproject/src/domain/entities/task_entity.dart';
 
+import '../../core/utils/bottom_sheet.dart';
 import '../../data/models/task.dart';
 import '../blocs/bloc/tasks_bloc.dart';
 
 class TasksList extends StatelessWidget {
-  const TasksList({
-    Key? key,
-    required this.tasks,
-  }) : super(key: key);
+  const TasksList(
+      {Key? key,
+      required this.tasks,
+      required this.categorys,
+      required this.filteredTasks})
+      : super(key: key);
 
   final List<Task> tasks;
-
+  final List<Task> filteredTasks;
+  final List<Category> categorys;
   @override
   Widget build(BuildContext context) {
     log('built');
     return ListWidget(
       tasks: tasks,
+      categorys: categorys,
+      filteredTasks: filteredTasks,
     );
   }
 }
@@ -27,10 +35,14 @@ class TasksList extends StatelessWidget {
 class ListWidget extends StatefulWidget {
   final List<Task> tasks;
 
-  const ListWidget({
-    Key? key,
-    required this.tasks,
-  }) : super(key: key);
+  final List<Task> filteredTasks;
+  final List<Category> categorys;
+  const ListWidget(
+      {Key? key,
+      required this.tasks,
+      required this.categorys,
+      required this.filteredTasks})
+      : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _ListViewState();
@@ -39,7 +51,24 @@ class ListWidget extends StatefulWidget {
 
 class _ListViewState extends State<ListWidget> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  void showsnackbar(String message, context) {
+    final snackbar = SnackBar(
+      content: Text(message),
+      duration: const Duration(seconds: 2),
+    );
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    List<Category> filteredCategory =
+        widget.categorys.where((element) => element.name != 'All').toList();
+
     return Expanded(
         child: ListView.builder(
       itemCount: widget.tasks.length,
@@ -50,22 +79,38 @@ class _ListViewState extends State<ListWidget> {
           key: Key(task.title),
           onDismissed: (direction) {
             context.read<TasksBloc>().add(DeleteTask(task: task));
-
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${task.title} dismissed')));
+            showsnackbar('${task.title} dismissed', context);
           },
-          child: ListTile(
-            title: Text(
-              task.title,
-              style: TextStyle(decoration: task.isDone! ? TextDecoration.lineThrough : TextDecoration.none),
-            ),
-            subtitle: Text(task.description),
-            trailing: Checkbox(
-              onChanged: (value) {
-                context.read<TasksBloc>().add(ToggleCheckBox(task: task));
+          child: GestureDetector(
+              onTap: () {
+                addTask(
+                  context,
+                  TaskEntity(
+                    title: task.title,
+                    description: task.description,
+                    isDone: task.isDone!,
+                    id: task.id,
+                    category: task.category,
+                  ),
+                  filteredCategory,
+                );
               },
-              value: task.isDone,
-            ),
-          ),
+              child: ListTile(
+                title: Text(
+                  task.title,
+                  style: TextStyle(
+                      decoration: task.isDone!
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none),
+                ),
+                subtitle: Text(task.description),
+                trailing: Checkbox(
+                  onChanged: (value) {
+                    context.read<TasksBloc>().add(ToggleCheckBox(task: task));
+                  },
+                  value: task.isDone,
+                ),
+              )),
         );
       },
     ));
