@@ -39,10 +39,14 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     });
 
     on<TaskActiveAndCompleteStatus>(((event, emit) async {
-      final state = this.state;
-      final result = await status.invoke(state.tasks);
+      try {
+        final state = this.state;
+        final result = await status.invoke(state.tasks);
 
-      emit(TasksState(state: result));
+        emit(TasksState(state: result));
+      } catch (e) {
+        e.toString();
+      }
     }));
   }
 }
