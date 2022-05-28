@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:testproject/src/core/utils/task_state.dart';
 import 'package:testproject/src/core/utils/tasks_sort.dart';
 import 'package:testproject/src/data/models/task.dart';
 import '../blocs/bloc/tasks_bloc.dart';
