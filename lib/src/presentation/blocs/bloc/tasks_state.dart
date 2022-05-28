@@ -2,14 +2,13 @@ part of 'tasks_bloc.dart';
 
 // ignore: must_be_immutable
 class TasksState extends Equatable {
-  List<Task> tasks;
-  TaskActiveAndCompleteState state;
-  TasksState({
+  final List<Task> tasks;
+  final TaskActiveAndCompleteState state;
+  const TasksState({
     this.tasks = const <Task>[],
-    this.state =
-        const TaskActiveAndCompleteState(activeTask: 0, completedTask: 0),
+    this.state = const TaskActiveAndCompleteState(activeTask: 0, completedTask: 0),
   });
 
   @override
-  List<Object> get props => [tasks];
+  List<Object> get props => [tasks, state];
 }

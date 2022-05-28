@@ -13,36 +13,36 @@ part 'tasks_event.dart';
 part 'tasks_state.dart';
 
 class TasksBloc extends Bloc<TasksEvent, TasksState> {
-  TasksBloc() : super(TasksState()) {
-    final TaskRepositoryImpl repo = injector<TaskRepositoryImpl>();
-    AddTaskUseCase add = AddTaskUseCase(repo);
-    ToggleCheckBoxUseCase toggle = ToggleCheckBoxUseCase(repo: repo);
-    DeleteTaskUseCase delete = DeleteTaskUseCase(repo);
-    GetStatusUseCase status = GetStatusUseCase(repo);
+  final TaskRepositoryImpl repo = injector<TaskRepositoryImpl>();
+  AddTaskUseCase get _addTaskUseCase => AddTaskUseCase(repo);
+  ToggleCheckBoxUseCase get _toggleTaskUsecase => ToggleCheckBoxUseCase(repo: repo);
+  GetStatusUseCase get _getStatusOfTasksUsecase => GetStatusUseCase(repo);
+  DeleteTaskUseCase get _deleteTaskUsecase => DeleteTaskUseCase(repo);
+  TasksBloc() : super(const TasksState()) {
     on<AddTask>((event, emit) async {
       final state = this.state;
-      final tasks = await add.invoke(state.tasks, event.task);
+      final tasks = await _addTaskUseCase.invoke(state.tasks, event.task);
 
       emit(TasksState(tasks: tasks));
     });
 
     on<ToggleCheckBox>(((event, emit) async {
       final state = this.state;
-      final result = await toggle.invoke(state.tasks, event.task);
+      final result = await _toggleTaskUsecase.invoke(state.tasks, event.task);
       emit(TasksState(tasks: result));
     }));
 
     on<DeleteTask>((event, emit) async {
       final state = this.state;
-      final result = await delete.invoke(state.tasks, event.task);
+      final result = await _deleteTaskUsecase.invoke(state.tasks, event.task);
       emit(TasksState(tasks: result));
     });
 
     on<TaskActiveAndCompleteStatus>(((event, emit) async {
       final state = this.state;
-      final result = await status.invoke(state.tasks);
+      final result = await _getStatusOfTasksUsecase.invoke(state.tasks);
 
-      emit(TasksState(state: result));
+      emit(TasksState(tasks: state.tasks, state: result));
     }));
   }
 }
