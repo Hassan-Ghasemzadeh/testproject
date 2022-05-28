@@ -24,7 +24,9 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  String currentFilterItem = 'All';
   bool isAscending = true;
+  String currentCategory = 'All';
   void handleClick(String value) {
     switch (value) {
       case 'Manage Category':
@@ -96,48 +98,66 @@ class _HomeViewState extends State<HomeView> {
 
                       return Padding(
                         padding: const EdgeInsets.only(left: 10.0, top: 10.0),
-                        child: SizedBox(
-                          width: 90,
-                          height: 40,
-                          child: Card(
-                            color: const Color.fromARGB(255, 233, 246, 255),
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: Center(
-                              child: Text(
-                                category.name,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(fontSize: 13.0),
+                        child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                currentCategory = category.name;
+                              });
+                            },
+                            child: SizedBox(
+                              width: 90,
+                              height: 40,
+                              child: Card(
+                                color: currentCategory == category.name
+                                    ? Colors.blue
+                                    : const Color.fromARGB(255, 233, 246, 255),
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    category.name,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(fontSize: 13.0),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
+                            )),
                       );
                     },
                     scrollDirection: Axis.horizontal,
                   )),
+              //all , active, completed list filter.
               SizedBox(
                   height: 50.0,
                   child: ListView.builder(
                     itemCount: filterTaskState.length,
                     itemBuilder: (context, index) {
                       final filterItem = filterTaskState[index];
-
                       return Container(
                         margin: const EdgeInsets.only(right: 10.0, top: 10.0),
                         child: Align(
                           alignment: Alignment.centerRight,
-                          child: Wrap(
-                            children: [
-                              Text(
-                                filterItem,
-                                style: const TextStyle(
-                                    color: Colors.black, fontSize: 12.0),
-                              ),
-                            ],
-                          ),
+                          child: GestureDetector(
+                              onTap: (() {
+                                setState(() {
+                                  currentFilterItem = filterItem;
+                                });
+                              }),
+                              child: Wrap(
+                                children: [
+                                  Text(
+                                    filterItem,
+                                    style: filterItem == currentFilterItem
+                                        ? const TextStyle(
+                                            color: Colors.black, fontSize: 12.0)
+                                        : const TextStyle(
+                                            color: Color.fromARGB(
+                                                255, 158, 158, 158)),
+                                  ),
+                                ],
+                              )),
                         ),
                       );
                     },
