@@ -49,9 +49,7 @@ class _HomeViewState extends State<HomeView> {
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
-          child: AddView(
-              titleController: titleController,
-              descriptionController: descriptionController),
+          child: AddView(titleController: titleController, descriptionController: descriptionController),
         ),
       ),
     );
@@ -77,9 +75,7 @@ class _HomeViewState extends State<HomeView> {
                   setState(() {
                     isAscending = !isAscending;
                   });
-                  isAscending
-                      ? sortTask(TaskSort.nameatoz, tasks)
-                      : sortTask(TaskSort.nameztoa, tasks);
+                  isAscending ? sortTask(TaskSort.nameatoz, tasks) : sortTask(TaskSort.nameztoa, tasks);
                 },
                 child: Text(
                   isAscending ? 'Ascending' : 'Descending',
@@ -97,9 +93,7 @@ class _HomeViewState extends State<HomeView> {
               TasksList(tasks: tasks),
               ElevatedButton(
                 onPressed: () {
-                  context
-                      .read<TasksBloc>()
-                      .add(TaskActiveAndCompleteStatus(tasks: tasks));
+                  context.read<TasksBloc>().add(TaskActiveAndCompleteStatus());
                 },
                 child: Text(
                   'Active:${state.state.activeTask} complete:${state.state.completedTask}',

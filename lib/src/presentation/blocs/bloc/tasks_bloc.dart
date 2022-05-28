@@ -19,23 +19,31 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
   GetStatusUseCase get _getStatusOfTasksUsecase => GetStatusUseCase(repo);
   DeleteTaskUseCase get _deleteTaskUsecase => DeleteTaskUseCase(repo);
   TasksBloc() : super(const TasksState()) {
+    on<TasksEvent>((event, emit) {
+      if (event.needUpdate) {
+        add(const TaskActiveAndCompleteStatus());
+      }
+    });
     on<AddTask>((event, emit) async {
       final state = this.state;
       final tasks = await _addTaskUseCase.invoke(state.tasks, event.task);
 
       emit(TasksState(tasks: tasks));
+      // add(TaskActiveAndCompleteStatus(tasks: tasks));
     });
 
     on<ToggleCheckBox>(((event, emit) async {
       final state = this.state;
-      final result = await _toggleTaskUsecase.invoke(state.tasks, event.task);
-      emit(TasksState(tasks: result));
+      final tasks = await _toggleTaskUsecase.invoke(state.tasks, event.task);
+      emit(TasksState(tasks: tasks));
+      // add(TaskActiveAndCompleteStatus(tasks: tasks));
     }));
 
     on<DeleteTask>((event, emit) async {
       final state = this.state;
-      final result = await _deleteTaskUsecase.invoke(state.tasks, event.task);
-      emit(TasksState(tasks: result));
+      final tasks = await _deleteTaskUsecase.invoke(state.tasks, event.task);
+      emit(TasksState(tasks: tasks));
+      // add(TaskActiveAndCompleteStatus(tasks: tasks));
     });
 
     on<TaskActiveAndCompleteStatus>(((event, emit) async {

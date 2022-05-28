@@ -2,7 +2,8 @@
 part of 'tasks_bloc.dart';
 
 abstract class TasksEvent extends Equatable {
-  const TasksEvent();
+  final bool needUpdate;
+  const TasksEvent(this.needUpdate);
 
   @override
   List<Object> get props => [];
@@ -12,7 +13,7 @@ class AddTask extends TasksEvent {
   final Task task;
   const AddTask({
     required this.task,
-  });
+  }) : super(true);
 
   @override
   List<Object> get props => [task];
@@ -22,7 +23,7 @@ class ToggleCheckBox extends TasksEvent {
   final Task task;
   const ToggleCheckBox({
     required this.task,
-  });
+  }) : super(true);
 
   @override
   List<Object> get props => [task];
@@ -32,16 +33,15 @@ class DeleteTask extends TasksEvent {
   final Task task;
   const DeleteTask({
     required this.task,
-  });
+  }) : super(true);
 
   @override
   List<Object> get props => [task];
 }
 
 class TaskActiveAndCompleteStatus extends TasksEvent {
-  final List<Task> tasks;
+  const TaskActiveAndCompleteStatus() : super(false);
 
-  const TaskActiveAndCompleteStatus({required this.tasks});
   @override
-  List<Object> get props => [tasks];
+  List<Object> get props => [];
 }
