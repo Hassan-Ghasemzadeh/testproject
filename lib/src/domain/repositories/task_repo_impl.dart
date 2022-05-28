@@ -4,8 +4,6 @@ import 'package:testproject/src/data/models/task_category.dart';
 import 'package:testproject/src/data/repositories/base_repository.dart';
 import 'package:testproject/src/data/datasources/task_data_source.dart';
 
-import '../../core/utils/filter_task_state.dart';
-
 class TaskRepositoryImpl extends ITaskRepository {
   final source = TaskDataSource();
   @override
@@ -35,7 +33,8 @@ class TaskRepositoryImpl extends ITaskRepository {
   }
 
   @override
-  Future<List<Task>> filterTaskList(List<Task> tasks, FilterTaskState filter) {
-    return source.filterCategory(tasks, filter);
+  Future<List<Task>> filterTaskList(
+      List<Task> tasks, String currentFilter, String currentCategory) {
+    return source.filterCategory(tasks, currentFilter, currentCategory);
   }
 }

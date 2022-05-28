@@ -11,15 +11,13 @@ import '../../data/models/task.dart';
 import '../blocs/bloc/tasks_bloc.dart';
 
 class TasksList extends StatelessWidget {
-  const TasksList(
-      {Key? key,
-      required this.tasks,
-      required this.categorys,
-      required this.filteredTasks})
-      : super(key: key);
+  const TasksList({
+    Key? key,
+    required this.tasks,
+    required this.categorys,
+  }) : super(key: key);
 
   final List<Task> tasks;
-  final List<Task> filteredTasks;
   final List<Category> categorys;
   @override
   Widget build(BuildContext context) {
@@ -27,7 +25,6 @@ class TasksList extends StatelessWidget {
     return ListWidget(
       tasks: tasks,
       categorys: categorys,
-      filteredTasks: filteredTasks,
     );
   }
 }
@@ -35,14 +32,12 @@ class TasksList extends StatelessWidget {
 class ListWidget extends StatefulWidget {
   final List<Task> tasks;
 
-  final List<Task> filteredTasks;
   final List<Category> categorys;
-  const ListWidget(
-      {Key? key,
-      required this.tasks,
-      required this.categorys,
-      required this.filteredTasks})
-      : super(key: key);
+  const ListWidget({
+    Key? key,
+    required this.tasks,
+    required this.categorys,
+  }) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _ListViewState();

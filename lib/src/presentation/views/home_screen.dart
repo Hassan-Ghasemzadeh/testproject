@@ -37,10 +37,16 @@ class _HomeViewState extends State<HomeView> {
   List<String> filterTaskState = ['Active', 'Completed', 'All'];
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<TasksBloc, TasksState>(
       builder: (context, state) {
         List<Task> tasks = state.tasks;
+
         List<Category> categorys = state.categorys;
         List<Category> filteredCategory =
             categorys.where((element) => element.name != 'All').toList();
@@ -165,7 +171,6 @@ class _HomeViewState extends State<HomeView> {
                     reverse: true,
                   )),
               TasksList(
-                filteredTasks: state.filteredTasks,
                 categorys: categorys,
                 tasks: tasks,
               ),

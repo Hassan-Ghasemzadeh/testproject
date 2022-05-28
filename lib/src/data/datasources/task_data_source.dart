@@ -49,9 +49,9 @@ class TaskDataSource {
   }
 
   Future<List<Task>> filterCategory(
-      List<Task> tasks, FilterTaskState filter) async {
+      List<Task> tasks, String currentFilter, String currentCategory) async {
     List<Task> filteredTask = <Task>[];
-    switch (filter.name) {
+    switch (currentFilter) {
       case 'all':
         filteredTask = tasks;
         break;
@@ -60,9 +60,14 @@ class TaskDataSource {
             tasks.where((element) => element.isDone == false).toList();
         break;
       case 'completed':
-        tasks.where((element) => element.isDone == true).toList();
+        filteredTask =
+            tasks.where((element) => element.isDone == true).toList();
         break;
     }
-    return filteredTask;
+
+    final List<Task> categoryAddedtoFilter = filteredTask
+        .where((element) => element.category == currentCategory)
+        .toList();
+    return categoryAddedtoFilter;
   }
 }

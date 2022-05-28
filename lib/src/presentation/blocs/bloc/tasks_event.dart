@@ -6,7 +6,7 @@ abstract class TasksEvent extends Equatable {
   const TasksEvent(this.needUpdate);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [needUpdate];
 }
 
 class AddTask extends TasksEvent {
@@ -51,11 +51,11 @@ class InsertCategoryEvent extends TasksEvent {
   const InsertCategoryEvent(this.category) : super(false);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [category];
 }
 
 class FilterTasksItem extends TasksEvent {
-  final FilterTaskState filter;
+  final String filter;
   const FilterTasksItem(this.filter) : super(false);
 
   @override
