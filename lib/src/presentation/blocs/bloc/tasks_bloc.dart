@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:testproject/src/core/utils/task_state.dart';
 import 'package:testproject/src/data/models/task.dart';
 import 'package:testproject/src/data/models/task_category.dart';
@@ -60,8 +61,8 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
       }
     });
     on<AddTask>((event, emit) async {
-      final tasks = await _addTaskUseCase.invoke(taskslist, event.task);
-
+      final tasks = await _addTaskUseCase.invoke(event.task);
+      debugPrint(tasks.map((e) => e.toMap()).toString());
       taskslist = tasks;
       emit(
         TasksState(
@@ -85,7 +86,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
 
     on<ToggleCheckBox>(
       ((event, emit) async {
-        final tasks = await _toggleTaskUsecase.invoke(taskslist, event.task);
+        final tasks = await _toggleTaskUsecase.invoke(event.task);
         taskslist = tasks;
 
         emit(TasksState(
@@ -108,7 +109,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     );
 
     on<DeleteTask>((event, emit) async {
-      final tasks = await _deleteTaskUsecase.invoke(taskslist, event.task);
+      final tasks = await _deleteTaskUsecase.invoke(event.task);
       taskslist = tasks;
 
       emit(
@@ -133,7 +134,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
 
     on<TaskActiveAndCompleteStatus>(
       ((event, emit) async {
-        final result = await _getStatusOfTasksUsecase.invoke(taskslist);
+        final result = await _getStatusOfTasksUsecase.invoke();
 
         status = result;
 
@@ -171,7 +172,6 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     on<FilterTasksItem>(
       ((event, emit) async {
         final result = await filterTaskUseCase.invoke(
-          taskslist,
           event.currentFilter,
           event.currentCategory,
         );

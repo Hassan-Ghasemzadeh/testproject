@@ -32,7 +32,7 @@ class Task extends Equatable {
   }
 
   @override
-  List<Object?> get props => [title, description, isDone, id];
+  List<Object?> get props => [title, description, isDone, id, category];
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -40,6 +40,7 @@ class Task extends Equatable {
       'description': description,
       'isDone': isDone,
       'id': id,
+      'category': category
     };
   }
 

@@ -4,30 +4,34 @@ import 'package:testproject/src/data/models/task.dart';
 import 'package:testproject/src/data/models/task_category.dart';
 
 class TaskDataSource {
-  Future<List<Task>> insert(List<Task> tasks, Task task) async {
-    return List.from(tasks)..setValueWhere((e) => e.id == task.id, task, true);
+  static List<Task> tasksList = const <Task>[];
+
+  Future<List<Task>> insert(Task task) async {
+    tasksList = List.from(tasksList)
+      ..setValueWhere((e) => e.id == task.id, task, true);
+    return tasksList;
   }
 
-  Future<List<Task>> toggleCheckBox(List<Task> tasks, Task task) async {
-    final index = tasks.indexOf(task);
+  Future<List<Task>> toggleCheckBox(Task task) async {
+    final index = tasksList.indexOf(task);
 
     task.isDone == false
-        ? tasks.insert(index, task.copyWith(isDone: true))
-        : tasks.insert(index, task.copyWith(isDone: false));
+        ? tasksList.insert(index, task.copyWith(isDone: true))
+        : tasksList.insert(index, task.copyWith(isDone: false));
 
-    List<Task> list = List.of(tasks)..remove(task);
-    return list;
+    tasksList = List.of(tasksList)..remove(task);
+    return tasksList;
   }
 
-  Future<List<Task>> delete(List<Task> tasks, Task task) async {
-    return List.from(tasks)..remove(task);
+  Future<List<Task>> delete(Task task) async {
+    tasksList = List.from(tasksList)..remove(task);
+    return tasksList;
   }
 
-  Future<TaskActiveAndCompleteState> getActiveAndCompleteTaskState(
-      List<Task> tasks) async {
-    var size = tasks.length;
+  Future<TaskActiveAndCompleteState> getActiveAndCompleteTaskState() async {
+    var size = tasksList.length;
     final List<Task> completed =
-        tasks.where((element) => element.isDone!).toList();
+        tasksList.where((element) => element.isDone!).toList();
 
     final int completedTaskCount = completed.length;
     if (size == 0) {
@@ -49,21 +53,19 @@ class TaskDataSource {
   }
 
   Future<List<Task>> filterCategory(
-      {required List<Task> tasks,
-      required String currentFilter,
-      required String currentCategory}) async {
+      {required String currentFilter, required String currentCategory}) async {
     List<Task> filteredTasks = <Task>[];
     switch (currentFilter) {
       case 'All':
-        filteredTasks = tasks;
+        filteredTasks = tasksList;
         break;
       case 'Active':
-        filteredTasks = tasks.where((element) {
+        filteredTasks = tasksList.where((element) {
           return element.isDone == false;
         }).toList();
         break;
       case 'Completed':
-        filteredTasks = tasks.where((element) {
+        filteredTasks = tasksList.where((element) {
           return element.isDone == true;
         }).toList();
         break;

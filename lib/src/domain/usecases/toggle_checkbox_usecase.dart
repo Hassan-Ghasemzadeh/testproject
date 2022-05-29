@@ -1,4 +1,4 @@
-import '../../core/utils/usecase_util/usecase.dart';
+import '../../core/utils/usecase_util/one_param_usecase_util.dart';
 import '../../data/models/task.dart';
 import '../repositories/task_repo_impl.dart';
 
@@ -8,7 +8,7 @@ class ToggleCheckBoxUseCase extends UseCase<List<Task>, Task> {
   ToggleCheckBoxUseCase({required this.repo});
 
   @override
-  Future<List<Task>> invoke(List<Task> t, Task p) async {
-    return repo.toggleCheckBox(t, p);
+  Future<List<Task>> invoke(Task p) async {
+    return repo.toggleCheckBox(p);
   }
 }

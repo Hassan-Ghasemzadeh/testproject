@@ -7,24 +7,23 @@ import 'package:testproject/src/data/datasources/task_data_source.dart';
 class TaskRepositoryImpl extends ITaskRepository {
   final source = TaskDataSource();
   @override
-  Future<List<Task>> insert(List<Task> tasks, Task task) async {
-    return source.insert(tasks, task);
+  Future<List<Task>> insert(Task task) async {
+    return source.insert(task);
   }
 
   @override
-  Future<List<Task>> toggleCheckBox(List<Task> tasks, Task task) async {
-    return source.toggleCheckBox(tasks, task);
+  Future<List<Task>> toggleCheckBox(Task task) async {
+    return source.toggleCheckBox(task);
   }
 
   @override
-  Future<List<Task>> delete(List<Task> tasks, Task task) async {
-    return source.delete(tasks, task);
+  Future<List<Task>> delete(Task task) async {
+    return source.delete(task);
   }
 
   @override
-  Future<TaskActiveAndCompleteState> getActiveAndCompleteTaskState(
-      List<Task> tasks) async {
-    return source.getActiveAndCompleteTaskState(tasks);
+  Future<TaskActiveAndCompleteState> getActiveAndCompleteTaskState() async {
+    return source.getActiveAndCompleteTaskState();
   }
 
   @override
@@ -34,12 +33,8 @@ class TaskRepositoryImpl extends ITaskRepository {
 
   @override
   Future<List<Task>> filterTaskList(
-      {required List<Task> tasks,
-      required String currentFilter,
-      required String currentCategory}) {
+      {required String currentFilter, required String currentCategory}) {
     return source.filterCategory(
-        tasks: tasks,
-        currentFilter: currentFilter,
-        currentCategory: currentCategory);
+        currentFilter: currentFilter, currentCategory: currentCategory);
   }
 }
