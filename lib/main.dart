@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testproject/src/injector.dart';
 
 import 'src/presentation/blocs/bloc/tasks_bloc.dart';
-import 'src/presentation/views/home_screen.dart';
+import 'src/presentation/widgets/bottom_navigator.dart';
 
 void main() {
   setUp();
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: "Todo App",
         theme: ThemeData(primarySwatch: Colors.blue),
-        home: const HomeScreen(),
+        home: const MyAppBottomNavigator(),
       ),
     );
   }
