@@ -55,9 +55,17 @@ class InsertCategoryEvent extends TasksEvent {
 }
 
 class FilterTasksItem extends TasksEvent {
-  final String filter;
-  const FilterTasksItem(this.filter) : super(false);
+  final String currentFilter;
+  final String currentCategory;
+  final List<Task> tasks;
+  final List<Task> filteredTasks;
+  const FilterTasksItem({
+    required this.tasks,
+    required this.currentFilter,
+    required this.currentCategory,
+    required this.filteredTasks,
+  }) : super(false);
 
   @override
-  List<Object> get props => [filter];
+  List<Object> get props => [currentFilter, currentCategory, tasks];
 }

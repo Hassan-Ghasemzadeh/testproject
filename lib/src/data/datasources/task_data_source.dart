@@ -1,4 +1,3 @@
-import 'package:testproject/src/core/utils/filter_task_state.dart';
 import 'package:testproject/src/core/utils/task_state.dart';
 import 'package:testproject/src/core/utils/value_setter.dart';
 import 'package:testproject/src/data/models/task.dart';
@@ -11,6 +10,7 @@ class TaskDataSource {
 
   Future<List<Task>> toggleCheckBox(List<Task> tasks, Task task) async {
     final index = tasks.indexOf(task);
+
     task.isDone == false
         ? tasks.insert(index, task.copyWith(isDone: true))
         : tasks.insert(index, task.copyWith(isDone: false));
@@ -49,25 +49,31 @@ class TaskDataSource {
   }
 
   Future<List<Task>> filterCategory(
-      List<Task> tasks, String currentFilter, String currentCategory) async {
-    List<Task> filteredTask = <Task>[];
+      {required List<Task> tasks,
+      required String currentFilter,
+      required String currentCategory}) async {
+    List<Task> filteredTasks = <Task>[];
     switch (currentFilter) {
-      case 'all':
-        filteredTask = tasks;
+      case 'All':
+        filteredTasks = tasks;
         break;
-      case 'active':
-        filteredTask =
-            tasks.where((element) => element.isDone == false).toList();
+      case 'Active':
+        filteredTasks = tasks.where((element) {
+          return element.isDone == false;
+        }).toList();
         break;
-      case 'completed':
-        filteredTask =
-            tasks.where((element) => element.isDone == true).toList();
+      case 'Completed':
+        filteredTasks = tasks.where((element) {
+          return element.isDone == true;
+        }).toList();
         break;
     }
 
-    final List<Task> categoryAddedtoFilter = filteredTask
-        .where((element) => element.category == currentCategory)
-        .toList();
-    return categoryAddedtoFilter;
+    if (currentCategory != 'All') {
+      filteredTasks = filteredTasks.where((element) {
+        return element.category == currentCategory;
+      }).toList();
+    }
+    return filteredTasks;
   }
 }

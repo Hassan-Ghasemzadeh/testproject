@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:testproject/src/core/utils/tasks_sort.dart';
 import 'package:testproject/src/data/models/task.dart';
@@ -24,9 +26,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  String currentFilterItem = 'All';
   bool isAscending = true;
-  String currentCategory = 'All';
   void handleClick(String value) {
     switch (value) {
       case 'Manage Category':
@@ -46,11 +46,11 @@ class _HomeViewState extends State<HomeView> {
     return BlocBuilder<TasksBloc, TasksState>(
       builder: (context, state) {
         List<Task> tasks = state.tasks;
-
+        List<Task> filteredTask = state.filteredTaskList;
         List<Category> categorys = state.categorys;
-        List<Category> filteredCategory =
-            categorys.where((element) => element.name != 'All').toList();
+        final currentCategory = state.currentCategory;
 
+        final currentFilter = state.currentFilter;
         return Scaffold(
           appBar: AppBar(
             title: const Text("Todo App"),
@@ -106,20 +106,32 @@ class _HomeViewState extends State<HomeView> {
                         padding: const EdgeInsets.only(left: 10.0, top: 10.0),
                         child: GestureDetector(
                             onTap: () {
-                              setState(() {
-                                currentCategory = category.name;
-                              });
+                              context.read<TasksBloc>().add(
+                                    FilterTasksItem(
+                                      tasks: state.tasks,
+                                      currentFilter: state.currentFilter,
+                                      currentCategory: category.name,
+                                      filteredTasks: state.filteredTaskList,
+                                    ),
+                                  );
                             },
                             child: SizedBox(
                               width: 90,
                               height: 40,
-                              child: Card(
-                                color: currentCategory == category.name
-                                    ? Colors.blue
-                                    : const Color.fromARGB(255, 233, 246, 255),
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 500),
+                                decoration: BoxDecoration(
+                                  color: currentCategory == category.name
+                                      ? Colors.blue
+                                      : const Color.fromARGB(
+                                          255, 233, 246, 255),
+                                  borderRadius: currentCategory == category.name
+                                      ? BorderRadius.circular(10)
+                                      : BorderRadius.circular(25),
+                                  // elevation: 0,
+                                  // shape: RoundedRectangleBorder(
+                                  //   borderRadius: BorderRadius.circular(10.0),
+                                  // ),
                                 ),
                                 child: Center(
                                   child: Text(
@@ -147,19 +159,24 @@ class _HomeViewState extends State<HomeView> {
                           alignment: Alignment.centerRight,
                           child: GestureDetector(
                               onTap: (() {
-                                setState(() {
-                                  currentFilterItem = filterItem;
-                                });
+                                context.read<TasksBloc>().add(
+                                      FilterTasksItem(
+                                          tasks: state.filteredTaskList,
+                                          currentFilter: filterItem,
+                                          currentCategory:
+                                              state.currentCategory,
+                                          filteredTasks:
+                                              state.filteredTaskList),
+                                    );
                               }),
                               child: Wrap(
                                 children: [
                                   Text(
                                     filterItem,
-                                    style: filterItem == currentFilterItem
-                                        ? const TextStyle(
-                                            color: Colors.black, fontSize: 12.0)
-                                        : const TextStyle(
-                                            color: Color.fromARGB(
+                                    style: TextStyle(
+                                        color: currentFilter == filterItem
+                                            ? Color.fromARGB(255, 0, 0, 0)
+                                            : Color.fromARGB(
                                                 255, 158, 158, 158)),
                                   ),
                                 ],
@@ -173,6 +190,7 @@ class _HomeViewState extends State<HomeView> {
               TasksList(
                 categorys: categorys,
                 tasks: tasks,
+                filteredTaskList: filteredTask,
               ),
               ElevatedButton(
                 onPressed: () {
@@ -188,7 +206,7 @@ class _HomeViewState extends State<HomeView> {
             ],
           ),
           floatingActionButton: FloatingActionButton(
-            onPressed: () => addTask(context, null, filteredCategory),
+            onPressed: () => addTask(context, null, categorys),
             tooltip: 'add task',
             child: const Icon(Icons.add),
           ),

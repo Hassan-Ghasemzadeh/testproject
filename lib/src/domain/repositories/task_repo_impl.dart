@@ -34,7 +34,12 @@ class TaskRepositoryImpl extends ITaskRepository {
 
   @override
   Future<List<Task>> filterTaskList(
-      List<Task> tasks, String currentFilter, String currentCategory) {
-    return source.filterCategory(tasks, currentFilter, currentCategory);
+      {required List<Task> tasks,
+      required String currentFilter,
+      required String currentCategory}) {
+    return source.filterCategory(
+        tasks: tasks,
+        currentFilter: currentFilter,
+        currentCategory: currentCategory);
   }
 }

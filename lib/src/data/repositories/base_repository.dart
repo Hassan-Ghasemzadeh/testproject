@@ -15,5 +15,7 @@ abstract class ITaskRepository {
   Future<List<Category>> insertCategory(List<Category> category, Category ctg);
 
   Future<List<Task>> filterTaskList(
-      List<Task> tasks, String currentFilter, String currentCategory);
+      {required List<Task> tasks,
+      required String currentFilter,
+      required String currentCategory});
 }

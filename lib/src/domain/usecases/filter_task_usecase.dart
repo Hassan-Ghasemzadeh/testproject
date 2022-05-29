@@ -8,6 +8,6 @@ class FilterTaskUseCase extends UseCase<List<Task>, String, String> {
   FilterTaskUseCase(this.repo);
   @override
   Future<List<Task>> invoke(List<Task> t, String p, String d) async {
-    return repo.filterTaskList(t, p, d);
+    return repo.filterTaskList(tasks: t, currentFilter: p, currentCategory: d);
   }
 }

@@ -22,7 +22,6 @@ class AddView extends StatelessWidget {
   final List<Category> categorys;
   @override
   Widget build(BuildContext context) {
-    inspect(entity);
     return AddTaskView(
       entity: entity ??
           TaskEntity(
