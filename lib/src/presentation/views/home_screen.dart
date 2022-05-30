@@ -173,8 +173,8 @@ class _HomeViewState extends State<HomeView> {
                                     filterItem,
                                     style: TextStyle(
                                         color: currentFilter == filterItem
-                                            ? Color.fromARGB(255, 0, 0, 0)
-                                            : Color.fromARGB(
+                                            ? const Color.fromARGB(255, 0, 0, 0)
+                                            : const Color.fromARGB(
                                                 255, 158, 158, 158)),
                                   ),
                                 ],

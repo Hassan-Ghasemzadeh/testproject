@@ -1,8 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:testproject/src/core/utils/text_field_util.dart';
 import 'package:testproject/src/data/models/task_category.dart';
 import 'package:testproject/src/domain/entities/task_entity.dart';
@@ -141,14 +140,14 @@ class _AddTaskViewState extends State<AddTaskView> {
               ElevatedButton(
                 onPressed: () {
                   var task = Task(
-                    title: controllers['title']!.controller.text,
-                    description: controllers['description']!.controller.text,
-                    id: widget.entity.id,
-                    category: widget.entity.category,
-                  );
+                      title: controllers['title']!.controller.text,
+                      description: controllers['description']!.controller.text,
+                      id: widget.entity.id,
+                      category: widget.entity.category,
+                      dateCreated: DateFormat("yyyy-MM-dd 00:00:00.000")
+                          .format(DateTime.now()));
 
                   context.read<TasksBloc>().add(AddTask(task: task));
-
                   Navigator.of(context).pop();
                 },
                 child: const Text('Save'),

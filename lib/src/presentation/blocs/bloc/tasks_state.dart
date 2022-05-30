@@ -4,11 +4,12 @@ part of 'tasks_bloc.dart';
 class TasksState extends Equatable {
   final List<Task> tasks;
   final List<Task> filteredTaskList;
-
   final TaskActiveAndCompleteState state;
   final List<Category> categorys;
   final String currentCategory;
   final String currentFilter;
+  final List<Task> taskByDate;
+  final String currentDate;
   const TasksState({
     this.tasks = const <Task>[],
     this.filteredTaskList = const <Task>[],
@@ -17,6 +18,8 @@ class TasksState extends Equatable {
     this.categorys = const <Category>[],
     this.currentCategory = 'All',
     this.currentFilter = 'All',
+    this.taskByDate = const <Task>[],
+    this.currentDate = '',
   });
 
   @override
@@ -27,5 +30,7 @@ class TasksState extends Equatable {
         categorys,
         currentCategory,
         currentFilter,
+        ...taskByDate,
+        currentDate,
       ];
 }

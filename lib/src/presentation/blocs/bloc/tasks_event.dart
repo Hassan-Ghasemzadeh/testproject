@@ -69,3 +69,13 @@ class FilterTasksItem extends TasksEvent {
   @override
   List<Object> get props => [currentFilter, currentCategory, tasks];
 }
+
+class GetTaskOnSpecificDate extends TasksEvent {
+  final String date;
+  const GetTaskOnSpecificDate({
+    required this.date,
+  }) : super(false);
+
+  @override
+  List<Object> get props => [date];
+}

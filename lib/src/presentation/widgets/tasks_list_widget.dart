@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:testproject/src/core/method_channel_utils.dart';
 import 'package:testproject/src/data/models/task_category.dart';
 import 'package:testproject/src/domain/entities/task_entity.dart';
 
@@ -81,6 +82,10 @@ class _ListViewState extends State<ListWidget> {
             showsnackbar('${task.title} dismissed', context);
           },
           child: GestureDetector(
+              onDoubleTap: () async {
+                print('double tapped');
+                await PushNotification.createNotification();
+              },
               onTap: () {
                 addTask(
                   context,

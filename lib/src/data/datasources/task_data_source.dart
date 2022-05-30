@@ -78,4 +78,8 @@ class TaskDataSource {
     }
     return filteredTasks;
   }
+
+  Future<List<Task>> getTaskOnSpecificDate(String date) async {
+    return tasksList.where((element) => element.dateCreated == date).toList();
+  }
 }

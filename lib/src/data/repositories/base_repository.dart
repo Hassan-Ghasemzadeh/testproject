@@ -15,4 +15,6 @@ abstract class ITaskRepository {
 
   Future<List<Task>> filterTaskList(
       {required String currentFilter, required String currentCategory});
+
+  Future<List<Task>> getTaskOnSpecificDate(String date);
 }

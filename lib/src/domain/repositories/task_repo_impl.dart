@@ -37,4 +37,9 @@ class TaskRepositoryImpl extends ITaskRepository {
     return source.filterCategory(
         currentFilter: currentFilter, currentCategory: currentCategory);
   }
+
+  @override
+  Future<List<Task>> getTaskOnSpecificDate(String date) async {
+    return source.getTaskOnSpecificDate(date);
+  }
 }

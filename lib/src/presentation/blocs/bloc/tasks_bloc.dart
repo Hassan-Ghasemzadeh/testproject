@@ -1,4 +1,4 @@
-import 'dart:developer';
+// ignore_for_file: invalid_use_of_visible_for_testing_member
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -11,6 +11,7 @@ import 'package:testproject/src/domain/usecases/add_task_usecase.dart';
 import 'package:testproject/src/domain/usecases/delete_usecase.dart';
 import 'package:testproject/src/domain/usecases/filter_task_usecase.dart';
 import 'package:testproject/src/domain/usecases/get_active_and_complete_task_status.dart';
+import 'package:testproject/src/domain/usecases/get_task_on_specific_date.dart';
 import 'package:testproject/src/domain/usecases/insert_category.dart';
 import 'package:testproject/src/domain/usecases/toggle_checkbox_usecase.dart';
 import 'package:uuid/uuid.dart';
@@ -27,6 +28,8 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
   DeleteTaskUseCase get _deleteTaskUsecase => DeleteTaskUseCase(repo);
   InsertCategoryUsecase get _insertCtg => InsertCategoryUsecase(repo: repo);
   FilterTaskUseCase get filterTaskUseCase => FilterTaskUseCase(repo);
+  GetTaskDateCreatedUseCase get getTaskByDate =>
+      GetTaskDateCreatedUseCase(repo);
   List<Category> categorys = <Category>[
     Category(
       name: 'All',
@@ -51,6 +54,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
   TaskActiveAndCompleteState status = const TaskActiveAndCompleteState(
       activeTaskPercent: 0, completedTaskPercent: 0);
 
+  List<Task> tasksByDate = <Task>[];
   String currentCategoryItem = 'All';
   String currentFilterItem = 'All';
 
@@ -193,6 +197,24 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
       }),
     );
 
-    emit(TasksState(categorys: categorys));
+    on<GetTaskOnSpecificDate>((event, emit) async {
+      final tasks = await getTaskByDate.invoke(event.date);
+      tasksByDate = tasks;
+
+      final tasksByDateCreated = TasksState(
+          categorys: categorys,
+          tasks: filteredTaskList,
+          filteredTaskList: filteredTaskList,
+          currentCategory: currentCategoryItem,
+          currentFilter: currentFilterItem,
+          state: status,
+          taskByDate: tasksByDate,
+          currentDate: event.date);
+      emit(tasksByDateCreated);
+    });
+
+    emit(
+      TasksState(categorys: categorys),
+    );
   }
 }
