@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:testproject/src/presentation/views/calendar_screen.dart';
 import 'package:testproject/src/presentation/views/home_screen.dart';
+import 'package:testproject/src/presentation/views/setting_screen.dart';
 
 class MyAppBottomNavigator extends StatelessWidget {
   const MyAppBottomNavigator({
@@ -35,7 +36,7 @@ class _BottomNavigatorViewState extends State<BottomNavigatorView> {
       body: PageView(
         controller: controller,
         physics: const NeverScrollableScrollPhysics(),
-        children: const [HomeScreen(), CalendarScreen()],
+        children: const [HomeScreen(), CalendarScreen(), SettingScreen()],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,
@@ -59,6 +60,10 @@ class _BottomNavigatorViewState extends State<BottomNavigatorView> {
             icon: Icon(Icons.calendar_today),
             label: 'Calendar',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Setting',
+          )
         ],
       ),
     );

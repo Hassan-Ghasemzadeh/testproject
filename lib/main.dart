@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,8 +8,9 @@ import 'package:testproject/src/injector.dart';
 import 'src/presentation/blocs/bloc/tasks_bloc.dart';
 import 'src/presentation/widgets/bottom_navigator.dart';
 
-void main() {
-  setUp();
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await setUp();
   BlocOverrides.runZoned(() => runApp(const MyApp()));
 }
 

@@ -2,7 +2,6 @@
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:testproject/src/core/utils/task_state.dart';
 import 'package:testproject/src/data/models/task.dart';
 import 'package:testproject/src/data/models/task_category.dart';
@@ -11,8 +10,8 @@ import 'package:testproject/src/domain/usecases/add_task_usecase.dart';
 import 'package:testproject/src/domain/usecases/delete_usecase.dart';
 import 'package:testproject/src/domain/usecases/filter_task_usecase.dart';
 import 'package:testproject/src/domain/usecases/get_active_and_complete_task_status.dart';
+import 'package:testproject/src/domain/usecases/get_all_task.dart';
 import 'package:testproject/src/domain/usecases/get_task_on_specific_date.dart';
-import 'package:testproject/src/domain/usecases/insert_category.dart';
 import 'package:testproject/src/domain/usecases/toggle_checkbox_usecase.dart';
 import 'package:uuid/uuid.dart';
 import '../../../injector.dart';
@@ -26,7 +25,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
       ToggleCheckBoxUseCase(repo: repo);
   GetStatusUseCase get _getStatusOfTasksUsecase => GetStatusUseCase(repo);
   DeleteTaskUseCase get _deleteTaskUsecase => DeleteTaskUseCase(repo);
-  InsertCategoryUsecase get _insertCtg => InsertCategoryUsecase(repo: repo);
+  GetAllTaskHiveOrSqf get _getallTaskHiveOrSqf => GetAllTaskHiveOrSqf(repo);
   FilterTaskUseCase get filterTaskUseCase => FilterTaskUseCase(repo);
   GetTaskDateCreatedUseCase get getTaskByDate =>
       GetTaskDateCreatedUseCase(repo);
@@ -66,11 +65,9 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     });
     on<AddTask>((event, emit) async {
       final tasks = await _addTaskUseCase.invoke(event.task);
-      debugPrint(tasks.map((e) => e.toMap()).toString());
-      taskslist = tasks;
+      filteredTaskList = tasks;
       emit(
         TasksState(
-          tasks: taskslist,
           categorys: categorys,
           currentCategory: currentCategoryItem,
           currentFilter: currentFilterItem,
@@ -80,7 +77,6 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
       );
       add(
         FilterTasksItem(
-          tasks: taskslist,
           currentFilter: currentFilterItem,
           currentCategory: currentCategoryItem,
           filteredTasks: filteredTaskList,
@@ -91,19 +87,19 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     on<ToggleCheckBox>(
       ((event, emit) async {
         final tasks = await _toggleTaskUsecase.invoke(event.task);
-        taskslist = tasks;
+        filteredTaskList = tasks;
 
-        emit(TasksState(
-          tasks: taskslist,
-          categorys: categorys,
-          currentCategory: currentCategoryItem,
-          currentFilter: currentFilterItem,
-          filteredTaskList: filteredTaskList,
-          state: status,
-        ));
+        emit(
+          TasksState(
+            categorys: categorys,
+            currentCategory: currentCategoryItem,
+            currentFilter: currentFilterItem,
+            filteredTaskList: filteredTaskList,
+            state: status,
+          ),
+        );
         add(
           FilterTasksItem(
-            tasks: taskslist,
             currentFilter: currentFilterItem,
             currentCategory: currentCategoryItem,
             filteredTasks: filteredTaskList,
@@ -114,11 +110,10 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
 
     on<DeleteTask>((event, emit) async {
       final tasks = await _deleteTaskUsecase.invoke(event.task);
-      taskslist = tasks;
+      filteredTaskList = tasks;
 
       emit(
         TasksState(
-          tasks: taskslist,
           categorys: categorys,
           filteredTaskList: filteredTaskList,
           currentCategory: currentCategoryItem,
@@ -128,7 +123,6 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
       );
       add(
         FilterTasksItem(
-          tasks: taskslist,
           currentFilter: currentFilterItem,
           currentCategory: currentCategoryItem,
           filteredTasks: filteredTaskList,
@@ -144,29 +138,10 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
 
         emit(
           TasksState(
-            tasks: taskslist,
             state: status,
             categorys: categorys,
             currentCategory: currentCategoryItem,
             currentFilter: currentFilterItem,
-            filteredTaskList: filteredTaskList,
-          ),
-        );
-      }),
-    );
-
-    on<InsertCategoryEvent>(
-      ((event, emit) async {
-        final result = await _insertCtg.invoke(categorys, event.category);
-
-        categorys = result;
-        emit(
-          TasksState(
-            categorys: categorys,
-            tasks: taskslist,
-            currentCategory: currentCategoryItem,
-            currentFilter: currentFilterItem,
-            state: status,
             filteredTaskList: filteredTaskList,
           ),
         );
@@ -184,7 +159,6 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
         currentFilterItem = event.currentFilter;
         final filteredState = TasksState(
           categorys: categorys,
-          tasks: filteredTaskList,
           filteredTaskList: filteredTaskList,
           currentCategory: event.currentCategory,
           currentFilter: event.currentFilter,
@@ -202,19 +176,44 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
       tasksByDate = tasks;
 
       final tasksByDateCreated = TasksState(
-          categorys: categorys,
-          tasks: filteredTaskList,
-          filteredTaskList: filteredTaskList,
-          currentCategory: currentCategoryItem,
-          currentFilter: currentFilterItem,
-          state: status,
-          taskByDate: tasksByDate,
-          currentDate: event.date);
-      emit(tasksByDateCreated);
+        categorys: categorys,
+        filteredTaskList: filteredTaskList,
+        currentCategory: currentCategoryItem,
+        currentFilter: currentFilterItem,
+        state: status,
+        taskByDate: tasksByDate,
+        currentDate: event.date,
+      );
+
+      emit(
+        tasksByDateCreated,
+      );
     });
 
+    on<GetAllTaskEvent>((event, emit) async {
+      final result = await _getallTaskHiveOrSqf.invoke();
+
+      filteredTaskList = result;
+      final getAllTaskHive = TasksState(
+        categorys: categorys,
+        filteredTaskList: filteredTaskList,
+        currentCategory: currentCategoryItem,
+        currentFilter: currentFilterItem,
+        state: status,
+      );
+
+      emit(getAllTaskHive);
+    });
     emit(
       TasksState(categorys: categorys),
+    );
+
+    add(
+      FilterTasksItem(
+        currentFilter: currentFilterItem,
+        currentCategory: currentCategoryItem,
+        filteredTasks: filteredTaskList,
+      ),
     );
   }
 }

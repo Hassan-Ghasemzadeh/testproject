@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,19 +13,15 @@ import '../blocs/bloc/tasks_bloc.dart';
 class TasksList extends StatelessWidget {
   const TasksList({
     Key? key,
-    required this.tasks,
     required this.categorys,
     required this.filteredTaskList,
   }) : super(key: key);
 
-  final List<Task> tasks;
   final List<Task> filteredTaskList;
   final List<Category> categorys;
   @override
   Widget build(BuildContext context) {
-    log('built');
     return ListWidget(
-      tasks: tasks,
       categorys: categorys,
       filteredTaskList: filteredTaskList,
     );
@@ -34,13 +29,10 @@ class TasksList extends StatelessWidget {
 }
 
 class ListWidget extends StatefulWidget {
-  final List<Task> tasks;
-
   final List<Task> filteredTaskList;
   final List<Category> categorys;
   const ListWidget({
     Key? key,
-    required this.tasks,
     required this.categorys,
     required this.filteredTaskList,
   }) : super(key: key);
@@ -68,13 +60,11 @@ class _ListViewState extends State<ListWidget> {
   @override
   Widget build(BuildContext context) {
     List<Category> filteredCategory = widget.categorys;
-
     return Expanded(
         child: ListView.builder(
       itemCount: widget.filteredTaskList.length,
       itemBuilder: (context, index) {
         var task = widget.filteredTaskList[index];
-
         return Dismissible(
           key: UniqueKey(),
           onDismissed: (direction) {
@@ -83,7 +73,6 @@ class _ListViewState extends State<ListWidget> {
           },
           child: GestureDetector(
               onDoubleTap: () async {
-                print('double tapped');
                 await PushNotification.createNotification();
               },
               onTap: () {
@@ -93,7 +82,7 @@ class _ListViewState extends State<ListWidget> {
                     title: task.title,
                     description: task.description,
                     isDone: task.isDone!,
-                    id: task.id,
+                    taskId: task.taskId,
                     category: task.category,
                   ),
                   filteredCategory,

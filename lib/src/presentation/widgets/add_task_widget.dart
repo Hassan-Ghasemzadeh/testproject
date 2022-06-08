@@ -27,7 +27,7 @@ class AddView extends StatelessWidget {
             title: '',
             description: '',
             isDone: false,
-            id: const Uuid().v4().toString(),
+            taskId: '',
             category: 'Birthday',
           ),
       categorys: categorys,
@@ -140,12 +140,13 @@ class _AddTaskViewState extends State<AddTaskView> {
               ElevatedButton(
                 onPressed: () {
                   var task = Task(
-                      title: controllers['title']!.controller.text,
-                      description: controllers['description']!.controller.text,
-                      id: widget.entity.id,
-                      category: widget.entity.category,
-                      dateCreated: DateFormat("yyyy-MM-dd 00:00:00.000")
-                          .format(DateTime.now()));
+                    title: controllers['title']!.controller.text,
+                    description: controllers['description']!.controller.text,
+                    taskId: const Uuid().v4().toString(),
+                    category: widget.entity.category,
+                    dateCreated: DateFormat("yyyy-MM-dd 00:00:00.000")
+                        .format(DateTime.now()),
+                  );
 
                   context.read<TasksBloc>().add(AddTask(task: task));
                   Navigator.of(context).pop();

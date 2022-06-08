@@ -43,7 +43,6 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return BlocBuilder<TasksBloc, TasksState>(
       builder: (context, state) {
-        List<Task> tasks = state.tasks;
         List<Task> filteredTask = state.filteredTaskList;
         List<Category> categorys = state.categorys;
         final currentCategory = state.currentCategory;
@@ -65,8 +64,8 @@ class _HomeViewState extends State<HomeView> {
                     isAscending = !isAscending;
                   });
                   isAscending
-                      ? sortTask(TaskSort.nameatoz, tasks)
-                      : sortTask(TaskSort.nameztoa, tasks);
+                      ? sortTask(TaskSort.nameatoz, filteredTask)
+                      : sortTask(TaskSort.nameztoa, filteredTask);
                 },
                 child: Text(
                   isAscending ? 'Ascending' : 'Descending',
@@ -106,7 +105,6 @@ class _HomeViewState extends State<HomeView> {
                             onTap: () {
                               context.read<TasksBloc>().add(
                                     FilterTasksItem(
-                                      tasks: state.tasks,
                                       currentFilter: state.currentFilter,
                                       currentCategory: category.name,
                                       filteredTasks: state.filteredTaskList,
@@ -159,7 +157,6 @@ class _HomeViewState extends State<HomeView> {
                               onTap: (() {
                                 context.read<TasksBloc>().add(
                                       FilterTasksItem(
-                                          tasks: state.filteredTaskList,
                                           currentFilter: filterItem,
                                           currentCategory:
                                               state.currentCategory,
@@ -187,7 +184,6 @@ class _HomeViewState extends State<HomeView> {
                   )),
               TasksList(
                 categorys: categorys,
-                tasks: tasks,
                 filteredTaskList: filteredTask,
               ),
               ElevatedButton(

@@ -46,28 +46,18 @@ class TaskActiveAndCompleteStatus extends TasksEvent {
   List<Object> get props => [];
 }
 
-class InsertCategoryEvent extends TasksEvent {
-  final Category category;
-  const InsertCategoryEvent(this.category) : super(false);
-
-  @override
-  List<Object> get props => [category];
-}
-
 class FilterTasksItem extends TasksEvent {
   final String currentFilter;
   final String currentCategory;
-  final List<Task> tasks;
   final List<Task> filteredTasks;
   const FilterTasksItem({
-    required this.tasks,
     required this.currentFilter,
     required this.currentCategory,
     required this.filteredTasks,
   }) : super(false);
 
   @override
-  List<Object> get props => [currentFilter, currentCategory, tasks];
+  List<Object> get props => [currentFilter, currentCategory];
 }
 
 class GetTaskOnSpecificDate extends TasksEvent {
@@ -78,4 +68,11 @@ class GetTaskOnSpecificDate extends TasksEvent {
 
   @override
   List<Object> get props => [date];
+}
+
+class GetAllTaskEvent extends TasksEvent {
+  const GetAllTaskEvent() : super(true);
+
+  @override
+  List<Object> get props => [];
 }

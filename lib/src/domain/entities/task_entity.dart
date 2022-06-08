@@ -9,7 +9,7 @@ class TaskEntity extends Equatable {
 
   final bool isDone;
 
-  final String id;
+  final String taskId;
 
   String category;
 
@@ -17,7 +17,7 @@ class TaskEntity extends Equatable {
       {required this.title,
       required this.description,
       required this.isDone,
-      required this.id,
+      required this.taskId,
       required this.category});
 
   @override
